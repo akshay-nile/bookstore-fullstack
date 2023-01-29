@@ -1,0 +1,82 @@
+<div align="center">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Book Name</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="!this.books.length">
+                <td colspan="6" style="padding: 25px; color: red;">No records available !</td>
+            </tr>
+            <tr *ngFor="let book of books;">
+                <div *ngIf="book.id == this.editBook.id; then activeBlock else deadBlock"></div>
+                <ng-template #activeBlock>
+                    <td>B{{book.id | number:'3.0-0'}}</td>
+                    <td><input type="text" [(ngModel)]="this.editBook.name" id="bknm" placeholder="Type book name"></td>
+                    <td><input type="text" [(ngModel)]="this.editBook.author" id="athr" placeholder="Author"></td>
+                    <td>
+                        <select [(ngModel)]="this.editBook.category" [ngClass]="{'ltgr': !book.category.length}">
+                            <option value="FICTION">Fiction</option>
+                            <option value="FANTACY">Fantacy</option>
+                            <option value="COMEDY">Comedy</option>
+                            <option value="MYSTERY">Mystery</option>
+                            <option value="HORROR">Horror</option>
+                            <option value="INSPIRATIONAL">Inspirational</option>
+                        </select>
+                    </td>
+                    <td>₹<input type="number" [(ngModel)]="this.editBook.price" placeholder="Price"></td>
+                    <td>
+                        <div class="controlls">
+                            <button [disabled]="!areBookFieldsValid(this.editBook)" (click)="updateBook(book)"
+                                id="updt">Update</button>
+                            <button (click)="clearBookFields()" id="cncl">Cancel</button>
+                        </div>
+                    </td>
+                </ng-template>
+                <ng-template #deadBlock>
+                    <td>B{{book.id | number:'3.0-0'}}</td>
+                    <td>{{book.name | titlecase}}</td>
+                    <td>{{book.author | titlecase}}</td>
+                    <td>{{book.category | titlecase}}</td>
+                    <td>{{book.price | currency:'INR':'symbol'}}</td>
+                    <td>
+                        <div class="controlls">
+                            <button (click)="makeBookEditable(book)" id="edit">Edit</button>
+                            <button (click)="deleteBookById(book.id)" id="del">Delete</button>
+                        </div>
+                    </td>
+                </ng-template>
+            </tr>
+            <tr>
+                <td>-----</td>
+                <td><input type="text" [(ngModel)]="this.addBook.name" id="bknm" placeholder="Type book name"></td>
+                <td><input type="text" [(ngModel)]="this.addBook.author" id="athr" placeholder="Author"></td>
+                <td>
+                    <select [(ngModel)]="this.addBook.category" [ngClass]="{'ltgr': !this.addBook.category.length}">
+                        <option *ngIf="!this.addBook.category.length" value="">Category</option>
+                        <option value="FICTION">Fiction</option>
+                        <option value="FANTACY">Fantacy</option>
+                        <option value="COMEDY">Comedy</option>
+                        <option value="MYSTERY">Mystery</option>
+                        <option value="HORROR">Horror</option>
+                        <option value="INSPIRATIONAL">Inspirational</option>
+                    </select>
+                </td>
+                <td>₹<input type="number" [(ngModel)]="this.addBook.price" placeholder="Price"></td>
+                <td>
+                    <div class="controlls">
+                        <button id="add" [disabled]="!areBookFieldsValid(this.addBook)"
+                            (click)="createBook()">Add</button>
+                        <button id="clr" (click)="clearBookFields()">Clear</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
